@@ -80,8 +80,6 @@ int main1(int argc, char **argv) {
 
   int nr_hidden = (int) getrenv("hidden", 100);
   int nr_hidden2 = (int) getrenv("hidden2", -1);
-  // int neps = (int) getrenv("neps", 3);
-  int neps = 3;
 
   if (load_name != "") {
     clstm.load(load_name);
@@ -95,20 +93,9 @@ int main1(int argc, char **argv) {
     vector<int> icodec, codec;
     get_codec(icodec, samples, &Sample::in);
     get_codec(codec, samples, &Sample::out);
-    int iclasses = (int) icodec.size();
-    int nclasses = (int) codec.size();
-    clstm.iclasses = iclasses;
-    clstm.nclasses = nclasses;
-
-    clstm.net = make_net("bidi2",  {{"ninput", iclasses},
-                                   {"noutput", nclasses},
-                                   {"nhidden", nr_hidden},
-                                   {"nhidden2", nr_hidden2}});
-    clstm.net->attr.set("neps", std::to_string(neps));
-
-    clstm.net->icodec.set(icodec);
-    clstm.net->codec.set(codec);
+    clstm.createBidi2(icodec, codec, nr_hidden, nr_hidden2);
   }
+
   clstm.setLearningRate(lrate, momentum);
   network_info(clstm.net, "");
 

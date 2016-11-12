@@ -80,6 +80,22 @@ struct CLSTMText {
     net->icodec.set(icodec);
     net->codec.set(codec);
   }
+
+  void createBidi2(const std::vector<int> &icodec, const std::vector<int> codec,
+                   int nhidden, int nhidden2) {
+    // This is just the simplest case of creating a network. For more complex
+    // networks, create them outside and assign them to "net".
+    iclasses = icodec.size();
+    nclasses = codec.size();
+    net = make_net("bidi2",  {{"ninput", (int)icodec.size()},
+                              {"noutput", (int)codec.size()},
+                              {"nhidden", nhidden},
+                              {"nhidden2", nhidden2}});
+    net->attr.set("neps", neps);
+    net->icodec.set(icodec);
+    net->codec.set(codec);
+  }
+
   void setInputs(const std::wstring &s) {
     Classes cs;
     net->icodec.encode(cs, s);
