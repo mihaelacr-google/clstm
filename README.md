@@ -2,15 +2,15 @@
 
 [![Join the chat at https://gitter.im/tmbdev/clstm](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tmbdev/clstm?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-To build a standalone C library, run
+Important notice: this branch is no longer being updated. This branch should be used to load the transliteration models from [this repository](https://github.com/googlei18n/transliteration).
 
-    scons
-    sudo scons install
+For an up to date version of clstm, check out the code [here](https://github.com/tmbdev/clstm).
     
-Prerequisites:
+## Prerequisites:
 
  - scons, Eigen
  - protocol buffer library and compiler
+ - libpng
  - HDF5 libraries and C++, Python bindings (optional, for HDF5 I/O)
  - ZMQ libraries and C++, Python bindings (optional, for display)
 
@@ -20,24 +20,32 @@ On Ubuntu, this means:
     hdf5-helpers libhdf5-8 libhdf5-cpp-8 libhdf5-dev python-h5py \
     libprotobuf-dev libprotobuf9 protobuf-compiler \                  
     libzmq3-dev libzmq3 libzmqpp-dev libzmqpp3 libpng12-dev
+
+## Building the library
+
+To build a standalone C library, run
+
+    scons
+    sudo scons install
+
+To build the Python extension, run
+
+    python setup.py build
+    sudo python setup.py install
     
-There are a bunch of options:
+When building the library, you have a couple of options:
 
  - `debug=1` build with debugging options, no optimization
  - `display=1` build with display support for debugging (requires ZMQ, Python)
  - `prefix=...` install under a different prefix (untested)
  - `eigen=...` where to look for Eigen include files (should contain `Eigen/Eigen`)
  - `hdf5lib=hdf5` what HDF5 library to use; enables HDF5 command line programs (may need `hdf5_serial` in some environments)
-
+    
 After building the executables, you can run two simple test runs as follows:
 
  - `run-cmu` will train an English-to-IPA LSTM
  - `run-uw3-500` will download a small OCR training/test set and train an OCR LSTM
 
-To build the Python extension, run
-
-    python setup.py build
-    sudo python setup.py install
 
 # Documentation / Examples
 
@@ -162,10 +170,3 @@ Note that most parameters are passed through the environment:
 See the notebooks in the `misc/` subdirectory for documentation on the parameters and examples of usage.
 
 (You can find all parameters via `grep 'get.env' *.cc`.)
-
-# TODO / UPCOMING
-
-  - Lua and Torch bindings
-  - more recurrent network types
-  - replacement of mdarray with Eigen Tensors
-  - 2D LSTM support
